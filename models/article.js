@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-useless-escape
 const regex = /^(https?\:\/\/)(www\.)?[a-z0-9]{1}[-\.\/a-z0-9-]*\.[a-z0-9]{1}[-\/a-z0-9-]*#?$/;
 const mongoose = require('mongoose');
 

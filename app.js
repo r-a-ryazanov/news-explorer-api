@@ -2,13 +2,15 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-// eslint-disable-next-line import/no-extraneous-dependencies
 const bodyParser = require('body-parser');
+const { errors } = require('celebrate');
+const signupRouter = require('./routes/signup.js');
+const signinRouter = require('./routes/signin.js');
 
 const { PORT = 3002 } = process.env;
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/mestodb', {
+mongoose.connect('mongodb://localhost:27017/newsdb', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
@@ -17,18 +19,20 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+// ----------Роутинг для создания пользователя-------------------
+app.use('/signup', signupRouter);
+app.use('/signin', signinRouter);
 app.all('/*', (req, res, next) => {
   const err = new Error('Запрашиваемый ресурс не найден');
   err.statusCode = 404;
   next(err);
 });
-// eslint-disable-next-line no-unused-vars
+app.use(errors());
+
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
-
   res.status(statusCode).send({ message: statusCode === 500 ? 'На сервере произошла ошибка' : message });
 });
 app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
   console.log();
 });
