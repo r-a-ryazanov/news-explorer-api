@@ -5,6 +5,7 @@
     "no-useless-escape": "off",
     "import/no-extraneous-dependencies": "off",
     "no-unused-vars": "off",
-    "func-names": "off"
+    "func-names": "off",
+    "eqeqeq":"off"
   }
 }

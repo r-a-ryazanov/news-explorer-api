@@ -7,6 +7,8 @@ const { errors } = require('celebrate');
 const signupRouter = require('./routes/signup.js');
 const signinRouter = require('./routes/signin.js');
 const usersRouter = require('./routes/users.js');
+const articlesRouter = require('./routes/articles.js');
+const { requestLogger, errorLogger } = require('./middlewares/Logger.js');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -20,17 +22,21 @@ mongoose.connect('mongodb://localhost:27017/newsdb', {
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(requestLogger);
 // ----------Роутинг для создания пользователя-------------------
 app.use('/signup', signupRouter);
 // ----------Роутинг для входа-------------------
 app.use('/signin', signinRouter);
 // ----------Роутинг для пользователей-------------------
 app.use('/users/me', usersRouter);
+// ----------Роутинг для статей-------------------
+app.use('/articles', articlesRouter);
 app.all('/*', (req, res, next) => {
   const err = new Error('Запрашиваемый ресурс не найден');
   err.statusCode = 404;
   next(err);
 });
+app.use(errorLogger);
 app.use(errors());
 
 app.use((err, req, res, next) => {
