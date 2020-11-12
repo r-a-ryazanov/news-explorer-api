@@ -4,16 +4,13 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
-const signupRouter = require('./routes/signup.js');
-const signinRouter = require('./routes/signin.js');
-const usersRouter = require('./routes/users.js');
-const articlesRouter = require('./routes/articles.js');
+const routers = require('./routes/index.js');
 const { requestLogger, errorLogger } = require('./middlewares/Logger.js');
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, BD_NAME = 'newsdb' } = process.env;
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/newsdb', {
+mongoose.connect(`mongodb://localhost:27017/${BD_NAME}`, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
@@ -23,14 +20,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
-// ----------Роутинг для создания пользователя-------------------
-app.use('/signup', signupRouter);
-// ----------Роутинг для входа-------------------
-app.use('/signin', signinRouter);
-// ----------Роутинг для пользователей-------------------
-app.use('/users/me', usersRouter);
-// ----------Роутинг для статей-------------------
-app.use('/articles', articlesRouter);
+app.use('/', routers);
 app.all('/*', (req, res, next) => {
   const err = new Error('Запрашиваемый ресурс не найден');
   err.statusCode = 404;

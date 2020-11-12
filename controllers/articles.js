@@ -28,7 +28,7 @@ module.exports.createArticle = (req, res, next) => {
     });
 };
 // -----------------Контроллер получения всех статей---------
-module.exports.getArticles = (req, res) => {
+module.exports.getArticles = (req, res, next) => {
   Article.find({}).select('+owner')
     .then((articles) => {
       const sendArticles = [];
@@ -47,6 +47,11 @@ module.exports.getArticles = (req, res) => {
         }
       });
       res.send(sendArticles);
+    })
+    .catch((e) => {
+      const err = new Error('Ошибка сервера');
+      err.statusCode = 500;
+      next(err);
     });
 };
 // ----------------Контроллер удаления статьи---------------

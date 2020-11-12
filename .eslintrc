@@ -6,6 +6,7 @@
     "import/no-extraneous-dependencies": "off",
     "no-unused-vars": "off",
     "func-names": "off",
-    "eqeqeq":"off"
+    "eqeqeq":"off",
+    "no-console":"off"
   }
 }

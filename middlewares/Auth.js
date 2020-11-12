@@ -16,7 +16,7 @@ module.exports = (req, res, next) => {
   try {
     payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
   } catch (e) {
-    const err = new Error('Перкдан неверный токен');
+    const err = new Error('Передан неверный токен');
     err.statusCode = 401;
     next(err);
   }
