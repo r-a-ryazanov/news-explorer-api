@@ -1,4 +1,4 @@
-const regex = /^(https?\:\/\/)(www\.)?[a-z0-9]{1}[-\.\/a-z0-9-]*\.[a-z0-9]{1}[-\/a-z0-9-]*#?$/;
+const regex = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
 const mongoose = require('mongoose');
 
 const articleSchema = mongoose.Schema({
