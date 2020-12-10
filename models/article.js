@@ -1,4 +1,3 @@
-const regex = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
 const mongoose = require('mongoose');
 
 const articleSchema = mongoose.Schema({
@@ -25,22 +24,10 @@ const articleSchema = mongoose.Schema({
   link: {
     type: String,
     required: true,
-    validate: {
-      validator(v) {
-        return regex.test(v);
-      },
-      message: 'Введите URL',
-    },
   },
   image: {
     type: String,
     required: true,
-    validate: {
-      validator(v) {
-        return regex.test(v);
-      },
-      message: 'Введите URL',
-    },
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
