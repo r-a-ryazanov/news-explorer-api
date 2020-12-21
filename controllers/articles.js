@@ -29,26 +29,13 @@ module.exports.createArticle = (req, res, next) => {
 };
 // -----------------Контроллер получения всех статей---------
 module.exports.getArticles = (req, res, next) => {
-  Article.find({}).select('+owner')
+  Article.find({ owner: req.user._id })
     .then((articles) => {
-      const sendArticles = [];
-      articles.forEach((item) => {
-        if (item.owner == req.user._id) {
-          sendArticles.push({
-            _id: item._id,
-            keyword: item.keyword,
-            title: item.title,
-            text: item.text,
-            date: item.date,
-            source: item.source,
-            link: item.link,
-            image: item.image,
-          });
-        }
-      });
-      res.send(sendArticles);
+      if (articles) {
+        res.send(articles);
+      }
     })
-    .catch((e) => {
+    .catch(() => {
       const err = new Error('Ошибка сервера');
       err.statusCode = 500;
       next(err);
@@ -60,7 +47,7 @@ module.exports.deleteArticle = (req, res, next) => {
     .orFail(new Error('Not Found'))
     .then((data) => {
       if (data) {
-        if (req.user._id == data.owner._id) {
+        if (req.user._id.indexOf(data.owner._id) > -1) {
           Article.findByIdAndRemove(req.params._id)
             .then((article) => res.send({ data: article }));
         } else {
